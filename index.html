@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Django Documentation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0C4B33;
+            --secondary: #1e8449;
+            --accent: #4ae8b6;
+            --dark: #121212;
+            --darker: #0a0a0a;
+            --light: #f8f9fa;
+            --gray: #2a2a2a;
+            --glass: rgba(18, 18, 18, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        .light-theme {
+            --primary: #0C4B33;
+            --secondary: #1e8449;
+            --accent: #0C4B33;
+            --dark: #f8f9fa;
+            --darker: #e9ecef;
+            --light: #121212;
+            --gray: #dee2e6;
+            --glass: rgba(248, 249, 250, 0.85);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: var(--transition);
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--light);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-attachment: fixed;
+        }
+
+        header {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+        }
+
+        h2 {
+            color: var(--accent);
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary);
+            font-weight: 700;
+        }
+
+        h3 {
+            color: var(--secondary);
+            margin: 25px 0 15px;
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 20px;
+            color: var(--light);
+        }
+
+        .container {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        .strengths {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .card {
+            background: rgba(30, 132, 73, 0.15);
+            padding: 25px;
+            border-radius: 16px;
+            border-left: 4px solid var(--accent);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 25px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            color: var(--light);
+        }
+
+        code {
+            background-color: rgba(0, 0, 0, 0.3);
+            color: var(--accent);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+            color: var(--accent);
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
+            margin: 25px 0;
+            font-family: 'Fira Code', monospace;
+            border: 1px solid var(--gray);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+        }
+
+        .command {
+            background: rgba(0, 0, 0, 0.3);
+            color: var(--accent);
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            font-family: 'Fira Code', monospace;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .screenshot {
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid var(--gray);
+            border-radius: 12px;
+            margin: 25px auto;
+            display: block;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .step-box {
+            background: rgba(30, 132, 73, 0.1);
+            padding: 25px;
+            border-radius: 16px;
+            margin: 20px 0;
+            border: 1px solid var(--glass-border);
+        }
+
+        .step-number {
+            background: var(--secondary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(30, 132, 73, 0.5);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .icon {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+
+        /* Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background: var(--gray);
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .tab.active {
+            background: var(--secondary);
+        }
+
+        .content-tab {
+            display: none;
+            padding: 20px;
+            background: var(--gray);
+            border-radius: 0 12px 12px 12px;
+            margin-bottom: 20px;
+        }
+
+        .content-tab.active {
+            display: block;
+        }
+
+        /* Toggle switch */
+        .theme-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--secondary);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Collapsible */
+        .collapsible {
+            background-color: rgba(30, 132, 73, 0.2);
+            color: white;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .active-collapse, .collapsible:hover {
+            background-color: rgba(30, 132, 73, 0.4);
+        }
+
+        .collapsible:after {
+            content: '\002B';
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .active-collapse:after {
+            content: "\2212";
+        }
+
+        .collapse-content {
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 12px 12px;
+        }
+
+        /* Progress bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: transparent;
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            width: 0%;
+        }
+
+        /* Navigation */
+        .page-nav {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            z-index: 1000;
+        }
+
+        .nav-dot {
+            display: block;
+            width: 12px;
+            height: 12px;
+            margin: 15px 0;
+            border-radius: 50%;
+            background: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-dot.active {
+            background: var(--accent);
+            transform: scale(1.5);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            header {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .container {
+                padding: 25px;
+            }
+            
+            .strengths {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .page-nav {
+                display: none;
+            }
+        }
+        
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animated {
+            animation: fadeIn 0.6s ease forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="theme-switch">
+        <label class="switch">
+            <input type="checkbox" id="themeToggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div class="page-nav">
+        <a href="#header" class="nav-dot active" data-section="header"></a>
+        <a href="#strengths" class="nav-dot" data-section="strengths"></a>
+        <a href="#installation" class="nav-dot" data-section="installation"></a>
+        <a href="#code" class="nav-dot" data-section="code"></a>
+    </div>
+
+    <header id="header" class="animated">
+        <h1><i class="fab fa-python icon"></i>Django</h1>
+        <p>High-level Python Web Framework</p>
+    </header>
+    
+    <div class="container animated delay-1" id="strengths">
+        <p>Django is a high-level Python web framework that helps you build web applications quickly and securely.</p>
+        
+        <h2><i class="fas fa-star icon"></i>Key Strengths</h2>
+        <div class="strengths">
+            <div class="card">
+                <h3><i class="fas fa-battery-full icon"></i>Batteries-included</h3>
+                <p>ORM, admin panel, authentication, routing, forms, templating, and more are built-in.</p>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-layer-group icon"></i>MTV Architecture</h3>
+                <p>Model - Template - View separates data (models), UI (templates), and request logic (views).</p>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-shield-alt icon"></i>Good Defaults & Security</h3>
+                <p>CSRF, XSS protection, password hashing and other security features are included.</p>
+            </div>
+            <div class="card">
+                <h3><i class="fas fa-expand-arrows-alt icon"></i>Scalable & Extensible</h3>
+                <p>Used for small sites and large applications.</p>
+            </div>
+        </div>
+        
+        <h2><i class="fas fa-cube icon"></i>Main Components</h2>
+        <ul>
+            <li><span class="gradient-text">Project</span>: top-level configuration (manage.py, settings.py, urls.py).</li>
+            <li><span class="gradient-text">App</span>: reusable submodule (e.g., blog, accounts).</li>
+            <li><span class="gradient-text">Models</span>: database tables as Python classes (ORM).</li>
+            <li><span class="gradient-text">Views</span>: functions/classes that handle requests and return responses.</li>
+            <li><span class="gradient-text">Templates</span>: HTML files with Django template language for rendering.</li>
+            <li><span class="gradient-text">Admin</span>: auto UI to manage models.</li>
+            <li><span class="gradient-text">Migrations</span>: schema changes tracked & applied with makemigrations/migrate.</li>
+        </ul>
+    </div>
+    
+    <div class="container animated delay-2" id="installation">
+        <h2><i class="fas fa-download icon"></i>Install Django on Windows</h2>
+        <p>These steps assume a Windows PC. I'll include PowerShell and Command Prompt variants.</p>
+        
+        <button class="collapsible">Step 1: Install Python</button>
+        <div class="collapse-content">
+            <ol>
+                <li>Download Python 3.11 or 3.12 from python.org and run the installer.</li>
+                <li><strong>Important</strong>: check <strong>"Add Python to PATH"</strong> while installing.</li>
+                <li>Verify in a terminal:</li>
+            </ol>
+            <div class="command">python --version<br># or if that fails<br>py -3 --version</div>
+        </div>
+        
+        <button class="collapsible">Step 2: Create Project Folder and Virtual Environment</button>
+        <div class="collapse-content">
+            <p>Open Command Prompt or PowerShell, then:</p>
+            <div class="command"># make a folder and enter it<br>mkdir C:\projects\mysite<br>cd C:\projects\mysite<br><br># create virtual env<br>python -m venv venv<br># or<br>py -3 -m venv venv</div>
+            <img src="D:\venv.png" alt="Screenshot of creating virtual environment" class="screenshot">
+        </div>
+        
+        <button class="collapsible">Step 3: Activate the Virtual Environment</button>
+        <div class="collapse-content">
+            <p><strong>PowerShell</strong></p>
+            <div class="command">.\venv\Scripts\Activate.ps1<br><br># If PowerShell blocks scripts, run once as admin:<br># Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</div>
+            
+            <p><strong>Command Prompt</strong></p>
+            <div class="command">.\venv\Scripts\activate</div>
+            <p>After activation your prompt will show (venv).</p>
+        </div>
+        
+        <div class="nav-tabs">
+            <div class="tab active" onclick="switchTab(0)">Step 4</div>
+            <div class="tab" onclick="switchTab(1)">Step 5</div>
+            <div class="tab" onclick="switchTab(2)">Step 6</div>
+            <div class="tab" onclick="switchTab(3)">Step 7</div>
+        </div>
+        
+        <div class="content-tab active">
+            <h3>Upgrade pip and install Django</h3>
+            <div class="command">python -m pip install --upgrade pip<br>pip install django<br><br># check version<br>python -m django --version</div>
+            <img src="C:\Users\Asus\OneDrive\Desktop\django website\image.png" alt="Screenshot of installing Django" class="screenshot">
+        </div>
+        
+        <div class="content-tab">
+            <h3>Create a Django project & app</h3>
+            <div class="command"># create a new project "mysite"<br>django-admin startproject mysite .<br><br># create an app called "blog"<br>python manage.py startapp blog</div>
+            <p>(Notice the . after startproject places files in current folder.)</p>
+        </div>
+        
+        <div class="content-tab">
+            <h3>Run initial migrations and start server</h3>
+            <div class="command">python manage.py migrate<br>python manage.py runserver</div>
+            <p>Open http://127.0.0.1:8000/ in your browser — you should see the Django welcome page.</p>
+        </div>
+        
+        <div class="content-tab">
+            <h3>Create an admin user</h3>
+            <div class="command">python manage.py createsuperuser<br># follow prompts for username/email/password</div>
+            <p>Visit http://127.0.0.1:8000/admin and log in.</p>
+            <img src="D:\Screenshot (238).png" alt="Screenshot of Django admin" class="screenshot">
+        </div>
+    </div>
+    
+    <div class="container animated delay-3" id="code">
+        <h2><i class="fas fa-code icon"></i>Code Examples</h2>
+        
+        <h3>mysite/urls.py</h3>
+        <pre><code id="code1">from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('blog.urls')),  # route root to blog app
+]</code><button class="copy-btn" onclick="copyCode('code1')">Copy</button></pre>
+        
+        <h3>blog/urls.py (create this file)</h3>
+        <pre><code id="code2">from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('', views.index, name='index'),
+]</code><button class="copy-btn" onclick="copyCode('code2')">Copy</button></pre>
+        
+        <h3>blog/views.py</h3>
+        <pre><code id="code3">from django.shortcuts import render
+
+def index(request):
+    return render(request, 'blog/index.html', {'message': 'Hello Django!'})</code><button class="copy-btn" onclick="copyCode('code3')">Copy</button></pre>
+        
+        <h3>Template: blog/templates/blog/index.html</h3>
+        <pre><code id="code4">&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;title&gt;Blog Home&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;{{ message }}&lt;/h1&gt;
+    &lt;p&gt;Welcome to the blog app.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code><button class="copy-btn" onclick="copyCode('code4')">Copy</button></pre>
+        
+        <p>Remember to add 'blog' to INSTALLED_APPS in mysite/settings.py.</p>
+    </div>
+    
+    <footer>
+        <p>Django Documentation | Created with <i class="fas fa-heart" style="color: #e74c3c;"></i> for developers</p>
+    </footer>
+
+    <script>
+        function switchTab(index) {
+            const tabs = document.querySelectorAll('.tab');
+            const contentTabs = document.querySelectorAll('.content-tab');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contentTabs.forEach(tab => tab.classList.remove('active'));
+            
+            tabs[index].classList.add('active');
+            contentTabs[index].classList.add('active');
+        }
+        const collapsibles = document.querySelectorAll('.collapsible');
+        collapsibles.forEach(item => {
+            item.addEventListener('click', function() {
+                this.classList.toggle('active-collapse');
+                const content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        });
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('change', function() {
+            document.body.classList.toggle('light-theme');
+        });
+        function copyCode(id) {
+            const codeElement = document.getElementById(id);
+            const textArea = document.createElement('textarea');
+            textArea.value = codeElement.textContent;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            const copyBtn = event.target;
+            const originalText = copyBtn.textContent;
+            copyBtn.textContent = 'Copied!';
+            setTimeout(() => {
+                copyBtn.textContent = originalText;
+            }, 2000);
+        }
+        window.onscroll = function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+            const sections = document.querySelectorAll('.container, header');
+            const navDots = document.querySelectorAll('.nav-dot');
+            
+            sections.forEach((section, index) => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top <= 100 && rect.bottom >= 100) {
+                    navDots.forEach(dot => dot.classList.remove('active'));
+                    navDots[index].classList.add('active');
+                }
+            });
+        };
+        document.querySelectorAll('.nav-dot').forEach(dot => {
+            dot.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-section');
+                const targetElement = document.getElementById(targetId);
+                window.scrollTo({
+                    top: targetElement.offsetTop - 20,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedElements = document.querySelectorAll('.animated');
+            
+            animatedElements.forEach(element => {
+                element.style.opacity = '0';
+            });
+            
+            setTimeout(() => {
+                animatedElements.forEach(element => {
+                    element.style.opacity = '1';
+                });
+            }, 100);
+        });
+    </script>
+</body>
+</html>
